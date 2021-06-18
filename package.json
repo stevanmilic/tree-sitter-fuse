@@ -1,0 +1,19 @@
+{
+    "name": "tree-sitter-fuse",
+    "version": "0.0.1",
+    "description": "Fuse grammar for tree-sitter.",
+    "main": "bindings/node",
+    "keywords": [
+        "parser",
+        "lexer"
+    ],
+    "scripts": {
+        "build": "tree-sitter generate && node-gyp build",
+        "test": "tree-sitter test && script/parse-examples"
+    },
+    "author": "Stevan Milic",
+    "license": "ISC",
+    "dependencies": {
+        "nan": "^2.14.2"
+    }
+}

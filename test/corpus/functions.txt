@@ -1,0 +1,23 @@
+==================
+Simple Functions
+==================
+
+fun sum(a: i32, b: i32) -> i32
+    a + b
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (parameter_list
+      (param
+        (identifier)
+        (identifier))
+      (param
+        (identifier)
+        (identifier)))
+    (identifier)
+    (infix_expression
+      (primary_expression (identifier))
+      (primary_expression (identifier)))))

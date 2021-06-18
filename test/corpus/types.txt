@@ -1,0 +1,140 @@
+=============
+Variant types
+=============
+
+type bool:
+    true
+    false
+
+type OptionInt:
+    Some(i32)
+    None
+
+type Option[T]:
+    Some(T)
+    None
+
+type Either[L, R]:
+    Left(l: L)
+    Right(r: R)
+
+---
+
+(source_file
+  (variant_definition
+    (identifier)
+    (variant_type_value
+      (identifier))
+    (variant_type_value
+      (identifier)))
+  (variant_definition
+    (identifier)
+    (variant_type_value
+      (identifier)
+      (variant_type_value_args
+        (type_list
+          (identifier))))
+    (variant_type_value
+      (identifier)))
+  (variant_definition
+    (identifier)
+    (type_param_clause
+      (type_param (identifier)))
+    (variant_type_value
+      (identifier)
+      (variant_type_value_args
+        (type_list (identifier))))
+    (variant_type_value (identifier)))
+  (variant_definition
+    (identifier)
+    (type_param_clause
+      (type_param
+        (identifier))
+      (type_param (identifier)))
+    (variant_type_value
+      (identifier)
+      (variant_type_value_args
+        (parameter_list
+          (param
+            (identifier)
+            (identifier)))))
+    (variant_type_value
+      (identifier)
+      (variant_type_value_args
+        (parameter_list
+          (param
+            (identifier)
+            (identifier)))))))
+
+============
+Record types
+============
+type Point:
+    x: i32
+    y: i32
+
+type DataPoint[A, B, C]:
+   a: A
+   b: B
+   c: C
+
+---
+
+(source_file
+  (record_definition
+    (identifier)
+    (record_type_field
+      (param
+        (identifier)
+        (identifier)))
+    (record_type_field
+      (param
+        (identifier)
+        (identifier))))
+  (record_definition
+    (identifier)
+    (type_param_clause
+      (type_param
+        (identifier))
+      (type_param
+        (identifier))
+      (type_param
+        (identifier)))
+    (record_type_field
+      (param
+        (identifier)
+        (identifier)))
+    (record_type_field
+      (param
+        (identifier)
+        (identifier)))
+    (record_type_field
+      (param
+        (identifier)
+        (identifier)))))
+
+
+============
+Tuple types
+============
+
+type TupleInt(i32, i32)
+
+type GenTuple[T](T, T)
+
+---
+
+(source_file
+  (tuple_definition
+    (identifier)
+    (type_list
+      (identifier)
+      (identifier)))
+  (tuple_definition
+    (identifier)
+    (type_param_clause
+      (type_param
+        (identifier)))
+    (type_list
+      (identifier)
+      (identifier))))
