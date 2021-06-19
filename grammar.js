@@ -90,7 +90,7 @@ module.exports = grammar({
             field('parameters', optional($.parameter_list)),
             ')',
             '->',
-            field('type', $._type),
+            field('type', $.type),
             $.block,
         ),
 
@@ -104,23 +104,23 @@ module.exports = grammar({
         ),
 
 
-        type_list: $ => commaSep1(field('type', $._type)),
+        type_list: $ => commaSep1(field('type', $.type)),
         type_arguments: $ => seq(
             '[',
             $.type_list,
             ']'
         ),
 
-        _type: $ => choice(
+        type: $ => choice(
             $.function_type,
             $.tuple_type,
             $._simple_type,
         ),
 
         function_type: $ => prec.right(seq(
-            field('parameter_types', $._type),
+            field('parameter_types', $.type),
             '->',
-            field('return_type', $._type)
+            field('return_type', $.type)
         )),
 
         tuple_type: $ => seq(
@@ -142,7 +142,7 @@ module.exports = grammar({
         param: $ => seq(
             field('name', $.identifier),
             ':',
-            field('type', $._type),
+            field('type', $.type),
         ),
 
         parameter_list: $ => commaSep1($.param),
@@ -158,7 +158,7 @@ module.exports = grammar({
             $.let_expression,
             $.match_expression,
             $.lambda_expression,
-            $.primary_expression,
+            $._primary_expression,
         ),
 
         inline_block_expression: $ => seq(
@@ -169,21 +169,21 @@ module.exports = grammar({
 
         inline_expression: $ => choice(
             $.lambda_expression,
-            $.primary_expression,
+            $._primary_expression,
             $.inline_block_expression,
         ),
 
         let_expression: $ => seq(
             'let',
             field('name', $.identifier),
-            optional(seq(':', field('type', $._type))),
+            optional(seq(':', field('type', $.type))),
             '=',
             $.inline_expression,
         ),
 
         binding: $ => prec(PREC.lambda_binding, seq(
             field('name', $.identifier),
-            optional(seq(':', field('type', $._type))),
+            optional(seq(':', field('type', $.type))),
         )),
 
         bindings: $ => seq(
@@ -200,7 +200,7 @@ module.exports = grammar({
             optional(
                 seq(
                     '->',
-                    field('type', $._type),
+                    field('type', $.type),
                 )
             ),
             '=>',
@@ -225,48 +225,49 @@ module.exports = grammar({
 
         match_expression: $ => seq(
             'match',
-            $.primary_expression,
+            $._primary_expression,
             ':',
             $._indent,
             repeat1($.case),
             $._dedent,
         ),
 
-        primary_expression: $ => choice(
+        _primary_expression: $ => choice(
             $.literal,
             $.identifier,
-            $._call_expression,
-            $._proj_expression,
+            $.this,
+            $.call_expression,
+            $.proj_expression,
             $._parenthesized_expression,
             $.infix_expression,
         ),
 
         arguments: $ => seq(
             '(',
-            commaSep(choice($.primary_expression, $.lambda_expression)),
+            commaSep(choice($._primary_expression, $.lambda_expression)),
             ')'
         ),
 
-        _call_expression: $ => prec(PREC.call, seq(
-            field('function', $.primary_expression),
+        call_expression: $ => prec(PREC.call, seq(
+            field('function', $._primary_expression),
             field('type_arguments', optional($.type_arguments)),
             field('arguments', $.arguments),
         )),
 
         infix_expression: $ => prec.left(PREC.infix, seq(
-          field('left', $.primary_expression),
+          field('left', $._primary_expression),
           field('operator', $.operator_identifier),
-          field('right', $.primary_expression)
+          field('right', $._primary_expression)
         )),
 
-        _proj_expression: $ => prec(PREC.field, seq(
-            field('value', $.primary_expression),
+        proj_expression: $ => prec(PREC.field, seq(
+            field('value', $._primary_expression),
             repeat1(seq('.', field('field', $.identifier)))
         )),
 
         _parenthesized_expression: $ => seq(
           '(',
-          $.primary_expression,
+          $._primary_expression,
           ')'
         ),
 
@@ -296,7 +297,11 @@ module.exports = grammar({
             $.string,
         ),
 
-        boolean: $ => choice('true', 'false'),
+        this: $ => 'this',
+
+        boolean: $ => choice($.true, $.false),
+        true: $ => 'true',
+        false: $ => 'false',
         integer: $ => /[\d\.]+/,
         string: $ => seq(
             '"',

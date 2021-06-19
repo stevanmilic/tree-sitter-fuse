@@ -8,11 +8,31 @@
       "required": false,
       "types": [
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infix_expression",
+          "named": true
+        },
+        {
           "type": "lambda_expression",
           "named": true
         },
         {
-          "type": "primary_expression",
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "proj_expression",
+          "named": true
+        },
+        {
+          "type": "this",
           "named": true
         }
       ]
@@ -37,19 +57,7 @@
         "required": false,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -90,7 +98,85 @@
   {
     "type": "boolean",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "false",
+          "named": true
+        },
+        {
+          "type": "true",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "call_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "arguments",
+            "named": true
+          }
+        ]
+      },
+      "function": {
+        "multiple": true,
+        "required": true,
+        "types": [
+          {
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "infix_expression",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "proj_expression",
+            "named": true
+          },
+          {
+            "type": "this",
+            "named": true
+          }
+        ]
+      },
+      "type_arguments": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_arguments",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "case",
@@ -120,6 +206,18 @@
       "required": true,
       "types": [
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infix_expression",
+          "named": true
+        },
+        {
           "type": "lambda_expression",
           "named": true
         },
@@ -128,11 +226,19 @@
           "named": true
         },
         {
+          "type": "literal",
+          "named": true
+        },
+        {
           "type": "match_expression",
           "named": true
         },
         {
-          "type": "primary_expression",
+          "type": "proj_expression",
+          "named": true
+        },
+        {
+          "type": "this",
           "named": true
         }
       ]
@@ -167,19 +273,7 @@
         "required": true,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -215,19 +309,7 @@
         "required": true,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -237,19 +319,7 @@
         "required": true,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -291,11 +361,39 @@
     "named": true,
     "fields": {
       "left": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "primary_expression",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "infix_expression",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "proj_expression",
+            "named": true
+          },
+          {
+            "type": "this",
             "named": true
           }
         ]
@@ -311,11 +409,39 @@
         ]
       },
       "right": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "primary_expression",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "infix_expression",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "proj_expression",
+            "named": true
+          },
+          {
+            "type": "this",
             "named": true
           }
         ]
@@ -346,6 +472,18 @@
       "required": true,
       "types": [
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infix_expression",
+          "named": true
+        },
+        {
           "type": "inline_block_expression",
           "named": true
         },
@@ -354,7 +492,15 @@
           "named": true
         },
         {
-          "type": "primary_expression",
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "proj_expression",
+          "named": true
+        },
+        {
+          "type": "this",
           "named": true
         }
       ]
@@ -379,19 +525,7 @@
         "required": false,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -431,19 +565,7 @@
         "required": false,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -492,11 +614,31 @@
       "required": true,
       "types": [
         {
+          "type": "call_expression",
+          "named": true
+        },
+        {
           "type": "case",
           "named": true
         },
         {
-          "type": "primary_expression",
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "infix_expression",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "proj_expression",
+          "named": true
+        },
+        {
+          "type": "this",
           "named": true
         }
       ]
@@ -526,19 +668,7 @@
         "required": true,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -611,22 +741,12 @@
     }
   },
   {
-    "type": "primary_expression",
+    "type": "proj_expression",
     "named": true,
     "fields": {
-      "arguments": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "arguments",
-            "named": true
-          }
-        ]
-      },
       "field": {
         "multiple": true,
-        "required": false,
+        "required": true,
         "types": [
           {
             "type": "identifier",
@@ -634,58 +754,44 @@
           }
         ]
       },
-      "function": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "primary_expression",
-            "named": true
-          }
-        ]
-      },
-      "type_arguments": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "type_arguments",
-            "named": true
-          }
-        ]
-      },
       "value": {
-        "multiple": false,
-        "required": false,
+        "multiple": true,
+        "required": true,
         "types": [
           {
-            "type": "primary_expression",
+            "type": "(",
+            "named": false
+          },
+          {
+            "type": ")",
+            "named": false
+          },
+          {
+            "type": "call_expression",
+            "named": true
+          },
+          {
+            "type": "identifier",
+            "named": true
+          },
+          {
+            "type": "infix_expression",
+            "named": true
+          },
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "proj_expression",
+            "named": true
+          },
+          {
+            "type": "this",
             "named": true
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "infix_expression",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "primary_expression",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -837,6 +943,33 @@
     }
   },
   {
+    "type": "type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "function_type",
+          "named": true
+        },
+        {
+          "type": "generic_type",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "tuple_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "type_arguments",
     "named": true,
     "fields": {},
@@ -896,19 +1029,7 @@
         "required": true,
         "types": [
           {
-            "type": "function_type",
-            "named": true
-          },
-          {
-            "type": "generic_type",
-            "named": true
-          },
-          {
-            "type": "identifier",
-            "named": true
-          },
-          {
-            "type": "tuple_type",
+            "type": "type",
             "named": true
           }
         ]
@@ -985,15 +1106,22 @@
   {
     "type": "variant_type_value",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
         {
           "type": "variant_type_value_args",
           "named": true
@@ -1122,7 +1250,7 @@
   },
   {
     "type": "false",
-    "named": false
+    "named": true
   },
   {
     "type": "fun",
@@ -1149,8 +1277,12 @@
     "named": false
   },
   {
+    "type": "this",
+    "named": true
+  },
+  {
     "type": "true",
-    "named": false
+    "named": true
   },
   {
     "type": "type",

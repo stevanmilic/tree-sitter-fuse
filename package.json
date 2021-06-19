@@ -15,5 +15,17 @@
     "license": "ISC",
     "dependencies": {
         "nan": "^2.14.2"
-    }
+    },
+    "devDependencies": {
+        "tree-sitter-cli": "^0.19.1"
+    },
+    "repository": "https://github.com/stevanmilic/tree-sitter-fuse",
+    "tree-sitter": [
+        {
+            "scope": "source.fuse",
+            "file-types": [
+                "fuse"
+            ]
+        }
+    ]
 }
