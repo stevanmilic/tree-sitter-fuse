@@ -1,3 +1,10 @@
+const PREC = {
+  lambda_binding: 1,
+  infix: 2,
+  call: 3,
+  field: 3,
+};
+
 module.exports = grammar({
     name: 'fuse',
 
@@ -17,6 +24,7 @@ module.exports = grammar({
             $.variant_definition,
             $.record_definition,
             $.tuple_definition,
+            $.type_function_definitions,
         ),
 
         variant_definition: $ => seq(
@@ -30,7 +38,7 @@ module.exports = grammar({
         ),
 
         variant_type_value: $ => seq(
-            $.identifier,
+            field('name', $.identifier),
             optional($.variant_type_value_args)
         ),
 
@@ -64,6 +72,16 @@ module.exports = grammar({
             ')',
         ),
 
+        type_function_definitions: $ => seq(
+            'impl',
+            field('type', $.identifier),
+            field('type_parameters', optional($.type_param_clause)),
+            ':',
+            $._indent,
+            field('methods', repeat1($.function_definition)),
+            $._dedent,
+        ),
+
         function_definition: $ => seq(
             'fun',
             field('name', $.identifier),
@@ -73,9 +91,7 @@ module.exports = grammar({
             ')',
             '->',
             field('type', $._type),
-            $._indent,
-            $.infix_expression,
-            $._dedent,
+            $.block,
         ),
 
         // Types 
@@ -132,18 +148,145 @@ module.exports = grammar({
         parameter_list: $ => commaSep1($.param),
 
         // Expressions
-        infix_expression: $ => seq(
-            $._primary_expression,
-            '+',
-            $._primary_expression,
+        block: $ => seq(
+            $._indent,
+            field('expressions', repeat1($.expression)),
+            $._dedent,
         ),
 
-        _primary_expression: $ => choice(
+        expression: $ => choice(
+            $.let_expression,
+            $.match_expression,
+            $.lambda_expression,
+            $.primary_expression,
+        ),
+
+        inline_block_expression: $ => seq(
+            '{',
+            $.block,
+            '}',
+        ),
+
+        inline_expression: $ => choice(
+            $.lambda_expression,
+            $.primary_expression,
+            $.inline_block_expression,
+        ),
+
+        let_expression: $ => seq(
+            'let',
+            field('name', $.identifier),
+            optional(seq(':', field('type', $._type))),
+            '=',
+            $.inline_expression,
+        ),
+
+        binding: $ => prec(PREC.lambda_binding, seq(
+            field('name', $.identifier),
+            optional(seq(':', field('type', $._type))),
+        )),
+
+        bindings: $ => seq(
+            '(',
+            commaSep($.binding),
+            ')',
+        ),
+
+        lambda_expression: $ => seq(
+            choice(
+                $.bindings,
+                field('name', $.identifier),
+            ),
+            optional(
+                seq(
+                    '->',
+                    field('type', $._type),
+                )
+            ),
+            '=>',
+            $.inline_expression,
+        ),
+
+        pattern: $ => choice(
+            seq(field('type', $.identifier), $.patterns),
+            $.patterns,
             $.literal,
             $.identifier,
+            '_',
+        ),
+
+        patterns: $ => seq('(', commaSep(field('pattern', $.pattern)), ')'),
+
+        case: $ => seq(
+            sep1('|', $.pattern),
+            '=>',
+            $.inline_expression,
+        ),
+
+        match_expression: $ => seq(
+            'match',
+            $.primary_expression,
+            ':',
+            $._indent,
+            repeat1($.case),
+            $._dedent,
+        ),
+
+        primary_expression: $ => choice(
+            $.literal,
+            $.identifier,
+            $._call_expression,
+            $._proj_expression,
+            $._parenthesized_expression,
+            $.infix_expression,
+        ),
+
+        arguments: $ => seq(
+            '(',
+            commaSep(choice($.primary_expression, $.lambda_expression)),
+            ')'
+        ),
+
+        _call_expression: $ => prec(PREC.call, seq(
+            field('function', $.primary_expression),
+            field('type_arguments', optional($.type_arguments)),
+            field('arguments', $.arguments),
+        )),
+
+        infix_expression: $ => prec.left(PREC.infix, seq(
+          field('left', $.primary_expression),
+          field('operator', $.operator_identifier),
+          field('right', $.primary_expression)
+        )),
+
+        _proj_expression: $ => prec(PREC.field, seq(
+            field('value', $.primary_expression),
+            repeat1(seq('.', field('field', $.identifier)))
+        )),
+
+        _parenthesized_expression: $ => seq(
+          '(',
+          $.primary_expression,
+          ')'
         ),
 
         // Lexical tokens
+
+        operator_identifier: $ => choice(
+            '+',
+            '-',
+            '*',
+            '/',
+            '%',
+            '<=',
+            '<',
+            '>',
+            '>=',
+            '==',
+            '!=',
+            '&&',
+            '||',
+        ),
 
         identifier: $ => /[a-zA-Z0-9_]+/,
 
@@ -177,6 +320,10 @@ module.exports = grammar({
     }
 
 });
+
+function commaSep(rule) {
+    return optional(commaSep1(rule))
+}
 
 function commaSep1(rule) {
     return seq(rule, repeat(seq(',', rule)))

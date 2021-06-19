@@ -2,6 +2,9 @@
 Simple Functions
 ==================
 
+fun greetings() -> string
+    "Hello World"
+
 fun sum(a: i32, b: i32) -> i32
     a + b
 
@@ -10,14 +13,319 @@ fun sum(a: i32, b: i32) -> i32
 (source_file
   (function_definition
     (identifier)
+    (identifier)
+    (block
+      (expression
+        (primary_expression
+          (literal (string))))))
+  (function_definition
+    (identifier)
+    (parameter_list
+      (param (identifier) (identifier))
+      (param (identifier) (identifier)))
+    (identifier)
+    (block
+      (expression
+        (primary_expression
+          (infix_expression
+            (primary_expression
+              (identifier))
+            (operator_identifier)
+            (primary_expression
+              (identifier))))))))
+
+
+=================
+Generic Functions
+=================
+
+fun is_some[A](o: Option[A]) -> bool
+    match o:
+        Some(a) => true
+        None => false
+
+fun map[A, B](l: List[A], f: A -> B) -> List[B]
+    let iter = (acc: List[B], l: List[A]) -> List[B] => {
+        match l:
+            Nil => acc
+            Cons(h, t) => iter(Cons[B](f(h), acc), t)
+    }
+    iter(Nil[B](), l)
+
+fun all_plus_one(l: List[i32]) -> List[i32]
+    l.map[i32, i32](a => a + 1)
+
+---
+
+(source_file
+  (function_definition
+    (identifier)
+    (type_param_clause
+      (type_param (identifier)))
     (parameter_list
       (param
         (identifier)
-        (identifier))
+        (generic_type
+          (identifier)
+          (type_arguments
+            (type_list (identifier))))))
+    (identifier)
+    (block
+      (expression
+        (match_expression
+          (primary_expression (identifier))
+          (case
+            (pattern (identifier)
+              (patterns
+                (pattern
+                  (identifier))))
+            (inline_expression
+              (primary_expression
+                (literal (boolean)))))
+          (case
+            (pattern
+              (identifier))
+            (inline_expression
+              (primary_expression
+                (literal (boolean)))))))))
+  (function_definition
+    (identifier)
+    (type_param_clause
+      (type_param (identifier))
+      (type_param (identifier)))
+    (parameter_list
       (param
         (identifier)
-        (identifier)))
+        (generic_type
+          (identifier)
+          (type_arguments
+            (type_list (identifier)))))
+      (param (identifier)
+        (function_type
+          (identifier)
+          (identifier))))
+    (generic_type
+      (identifier)
+      (type_arguments
+        (type_list
+          (identifier))))
+    (block
+      (expression
+        (let_expression
+          (identifier)
+          (inline_expression
+            (lambda_expression
+              (bindings
+                (binding
+                  (identifier)
+                  (generic_type
+                    (identifier)
+                    (type_arguments
+                      (type_list
+                        (identifier)))))
+                (binding
+                  (identifier)
+                  (generic_type
+                    (identifier)
+                    (type_arguments
+                      (type_list
+                        (identifier))))))
+              (generic_type
+                (identifier)
+                (type_arguments
+                  (type_list
+                    (identifier))))
+              (inline_expression
+                (inline_block_expression
+                  (block
+                    (expression
+                      (match_expression
+                        (primary_expression
+                          (identifier))
+                        (case
+                          (pattern
+                            (identifier))
+                          (inline_expression
+                            (primary_expression
+                              (identifier))))
+                        (case
+                          (pattern
+                            (identifier)
+                            (patterns
+                              (pattern
+                                (identifier))
+                              (pattern
+                                (identifier))))
+                          (inline_expression
+                            (primary_expression
+                              (primary_expression
+                                (identifier))
+                              (arguments
+                                (primary_expression
+                                  (primary_expression
+                                    (identifier))
+                                  (type_arguments
+                                    (type_list
+                                      (identifier)))
+                                  (arguments
+                                    (primary_expression
+                                      (primary_expression
+                                        (identifier))
+                                      (arguments
+                                        (primary_expression
+                                          (identifier))))
+                                    (primary_expression
+                                      (identifier))))
+                                (primary_expression
+                                  (identifier)))))))))))))))
+      (expression
+        (primary_expression
+          (primary_expression
+            (identifier))
+          (arguments
+            (primary_expression
+              (primary_expression
+                (identifier))
+              (type_arguments
+                (type_list
+                  (identifier)))
+              (arguments))
+            (primary_expression
+              (identifier)))))))
+  (function_definition
     (identifier)
-    (infix_expression
-      (primary_expression (identifier))
-      (primary_expression (identifier)))))
+    (parameter_list
+      (param
+        (identifier)
+        (generic_type
+          (identifier)
+          (type_arguments
+            (type_list
+              (identifier))))))
+    (generic_type
+      (identifier)
+      (type_arguments
+        (type_list
+          (identifier))))
+    (block
+      (expression
+        (primary_expression
+          (primary_expression
+            (primary_expression
+              (identifier))
+            (identifier))
+          (type_arguments
+            (type_list
+              (identifier)
+              (identifier)))
+          (arguments
+            (lambda_expression
+              (identifier)
+              (inline_expression
+                (primary_expression
+                  (infix_expression
+                    (primary_expression
+                      (identifier))
+                    (operator_identifier)
+                    (primary_expression
+                      (identifier))))))))))))
+
+=======
+Methods
+=======
+
+impl List[A]:
+    fun map[B](f: A -> B) -> List[B]
+        let iter = (acc, l) => {
+            match l:
+                Nil => acc
+                Cons(h, t) => iter(Cons(f(h), acc), t)
+        }
+        iter(Nil(), this)
+
+---
+
+(source_file
+  (type_function_definitions
+    (identifier)
+    (type_param_clause
+      (type_param
+        (identifier)))
+    (function_definition
+      (identifier)
+      (type_param_clause
+        (type_param
+          (identifier)))
+      (parameter_list
+        (param
+          (identifier)
+          (function_type
+            (identifier)
+            (identifier))))
+      (generic_type
+        (identifier)
+        (type_arguments
+          (type_list
+            (identifier))))
+      (block
+        (expression
+          (let_expression
+            (identifier)
+            (inline_expression
+              (lambda_expression
+                (bindings
+                  (binding
+                    (identifier))
+                  (binding
+                    (identifier)))
+                (inline_expression
+                  (inline_block_expression
+                    (block
+                      (expression
+                        (match_expression
+                          (primary_expression
+                            (identifier))
+                          (case
+                            (pattern
+                              (identifier))
+                            (inline_expression
+                              (primary_expression
+                                (identifier))))
+                          (case
+                            (pattern
+                              (identifier)
+                              (patterns
+                                (pattern
+                                  (identifier))
+                                (pattern
+                                  (identifier))))
+                            (inline_expression
+                              (primary_expression
+                                (primary_expression
+                                  (identifier))
+                                (arguments
+                                  (primary_expression
+                                    (primary_expression
+                                      (identifier))
+                                    (arguments
+                                      (primary_expression
+                                        (primary_expression
+                                          (identifier))
+                                        (arguments
+                                          (primary_expression
+                                            (identifier))))
+                                      (primary_expression
+                                        (identifier))))
+                                  (primary_expression
+                                    (identifier)))))))))))))))
+        (expression
+          (primary_expression
+            (primary_expression
+              (identifier))
+            (arguments
+              (primary_expression
+                (primary_expression
+                  (identifier))
+                (arguments))
+              (primary_expression
+                (identifier)))))))))
