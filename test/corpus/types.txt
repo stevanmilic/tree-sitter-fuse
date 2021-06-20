@@ -1,6 +1,6 @@
-=============
+================================================================================
 Variant types
-=============
+================================================================================
 
 type bool:
     true
@@ -18,7 +18,7 @@ type Either[L, R]:
     Left(l: L)
     Right(r: R)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (variant_definition
@@ -33,42 +33,50 @@ type Either[L, R]:
       (identifier)
       (variant_type_value_args
         (type_list
-          (identifier))))
+          (type
+            (identifier)))))
     (variant_type_value
       (identifier)))
   (variant_definition
     (identifier)
     (type_param_clause
-      (type_param (identifier)))
+      (type_param
+        (identifier)))
     (variant_type_value
       (identifier)
       (variant_type_value_args
-        (type_list (identifier))))
-    (variant_type_value (identifier)))
+        (type_list
+          (type
+            (identifier)))))
+    (variant_type_value
+      (identifier)))
   (variant_definition
     (identifier)
     (type_param_clause
       (type_param
         (identifier))
-      (type_param (identifier)))
+      (type_param
+        (identifier)))
     (variant_type_value
       (identifier)
       (variant_type_value_args
         (parameter_list
           (param
             (identifier)
-            (identifier)))))
+            (type
+              (identifier))))))
     (variant_type_value
       (identifier)
       (variant_type_value_args
         (parameter_list
           (param
             (identifier)
-            (identifier)))))))
+            (type
+              (identifier))))))))
 
-============
+================================================================================
 Record types
-============
+================================================================================
 type Point:
     x: i32
     y: i32
@@ -78,7 +86,7 @@ type DataPoint[A, B, C]:
    b: B
    c: C
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (record_definition
@@ -86,11 +94,13 @@ type DataPoint[A, B, C]:
     (record_type_field
       (param
         (identifier)
-        (identifier)))
+        (type
+          (identifier))))
     (record_type_field
       (param
         (identifier)
-        (identifier))))
+        (type
+          (identifier)))))
   (record_definition
     (identifier)
     (type_param_clause
@@ -103,38 +113,44 @@ type DataPoint[A, B, C]:
     (record_type_field
       (param
         (identifier)
-        (identifier)))
+        (type
+          (identifier))))
     (record_type_field
       (param
         (identifier)
-        (identifier)))
+        (type
+          (identifier))))
     (record_type_field
       (param
         (identifier)
-        (identifier)))))
+        (type
+          (identifier))))))
 
-
-============
+================================================================================
 Tuple types
-============
+================================================================================
 
 type TupleInt(i32, i32)
 
 type GenTuple[T](T, T)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (tuple_definition
     (identifier)
     (type_list
-      (identifier)
-      (identifier)))
+      (type
+        (identifier))
+      (type
+        (identifier))))
   (tuple_definition
     (identifier)
     (type_param_clause
       (type_param
         (identifier)))
     (type_list
-      (identifier)
-      (identifier))))
+      (type
+        (identifier))
+      (type
+        (identifier)))))

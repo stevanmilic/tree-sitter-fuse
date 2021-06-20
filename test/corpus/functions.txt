@@ -1,6 +1,6 @@
-==================
+================================================================================
 Simple Functions
-==================
+================================================================================
 
 fun greetings() -> string
     "Hello World"
@@ -8,36 +8,40 @@ fun greetings() -> string
 fun sum(a: i32, b: i32) -> i32
     a + b
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (function_definition
     (identifier)
-    (identifier)
+    (type
+      (identifier))
     (block
       (expression
-        (primary_expression
-          (literal (string))))))
+        (literal
+          (string)))))
   (function_definition
     (identifier)
     (parameter_list
-      (param (identifier) (identifier))
-      (param (identifier) (identifier)))
-    (identifier)
+      (param
+        (identifier)
+        (type
+          (identifier)))
+      (param
+        (identifier)
+        (type
+          (identifier))))
+    (type
+      (identifier))
     (block
       (expression
-        (primary_expression
-          (infix_expression
-            (primary_expression
-              (identifier))
-            (operator_identifier)
-            (primary_expression
-              (identifier))))))))
+        (infix_expression
+          (identifier)
+          (operator_identifier)
+          (identifier))))))
 
-
-=================
+================================================================================
 Generic Functions
-=================
+================================================================================
 
 fun is_some[A](o: Option[A]) -> bool
     match o:
@@ -55,60 +59,79 @@ fun map[A, B](l: List[A], f: A -> B) -> List[B]
 fun all_plus_one(l: List[i32]) -> List[i32]
     l.map[i32, i32](a => a + 1)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (function_definition
     (identifier)
     (type_param_clause
-      (type_param (identifier)))
+      (type_param
+        (identifier)))
     (parameter_list
       (param
         (identifier)
-        (generic_type
-          (identifier)
-          (type_arguments
-            (type_list (identifier))))))
-    (identifier)
+        (type
+          (generic_type
+            (identifier)
+            (type_arguments
+              (type_list
+                (type
+                  (identifier))))))))
+    (type
+      (identifier))
     (block
       (expression
         (match_expression
-          (primary_expression (identifier))
+          (identifier)
           (case
-            (pattern (identifier)
+            (pattern
+              (identifier)
               (patterns
                 (pattern
                   (identifier))))
             (inline_expression
-              (primary_expression
-                (literal (boolean)))))
+              (literal
+                (boolean
+                  (true)))))
           (case
             (pattern
               (identifier))
             (inline_expression
-              (primary_expression
-                (literal (boolean)))))))))
+              (literal
+                (boolean
+                  (false)))))))))
   (function_definition
     (identifier)
     (type_param_clause
-      (type_param (identifier))
-      (type_param (identifier)))
+      (type_param
+        (identifier))
+      (type_param
+        (identifier)))
     (parameter_list
       (param
         (identifier)
-        (generic_type
-          (identifier)
-          (type_arguments
-            (type_list (identifier)))))
-      (param (identifier)
-        (function_type
-          (identifier)
-          (identifier))))
-    (generic_type
-      (identifier)
-      (type_arguments
-        (type_list
-          (identifier))))
+        (type
+          (generic_type
+            (identifier)
+            (type_arguments
+              (type_list
+                (type
+                  (identifier)))))))
+      (param
+        (identifier)
+        (type
+          (function_type
+            (type
+              (identifier))
+            (type
+              (identifier))))))
+    (type
+      (generic_type
+        (identifier)
+        (type_arguments
+          (type_list
+            (type
+              (identifier))))))
     (block
       (expression
         (let_expression
@@ -118,36 +141,40 @@ fun all_plus_one(l: List[i32]) -> List[i32]
               (bindings
                 (binding
                   (identifier)
-                  (generic_type
-                    (identifier)
-                    (type_arguments
-                      (type_list
-                        (identifier)))))
+                  (type
+                    (generic_type
+                      (identifier)
+                      (type_arguments
+                        (type_list
+                          (type
+                            (identifier)))))))
                 (binding
                   (identifier)
-                  (generic_type
-                    (identifier)
-                    (type_arguments
-                      (type_list
+                  (type
+                    (generic_type
+                      (identifier)
+                      (type_arguments
+                        (type_list
+                          (type
+                            (identifier))))))))
+              (type
+                (generic_type
+                  (identifier)
+                  (type_arguments
+                    (type_list
+                      (type
                         (identifier))))))
-              (generic_type
-                (identifier)
-                (type_arguments
-                  (type_list
-                    (identifier))))
               (inline_expression
                 (inline_block_expression
                   (block
                     (expression
                       (match_expression
-                        (primary_expression
-                          (identifier))
+                        (identifier)
                         (case
                           (pattern
                             (identifier))
                           (inline_expression
-                            (primary_expression
-                              (identifier))))
+                            (identifier)))
                         (case
                           (pattern
                             (identifier)
@@ -157,82 +184,78 @@ fun all_plus_one(l: List[i32]) -> List[i32]
                               (pattern
                                 (identifier))))
                           (inline_expression
-                            (primary_expression
-                              (primary_expression
-                                (identifier))
+                            (call_expression
+                              (identifier)
                               (arguments
-                                (primary_expression
-                                  (primary_expression
-                                    (identifier))
+                                (call_expression
+                                  (identifier)
                                   (type_arguments
                                     (type_list
-                                      (identifier)))
+                                      (type
+                                        (identifier))))
                                   (arguments
-                                    (primary_expression
-                                      (primary_expression
-                                        (identifier))
+                                    (call_expression
+                                      (identifier)
                                       (arguments
-                                        (primary_expression
-                                          (identifier))))
-                                    (primary_expression
-                                      (identifier))))
-                                (primary_expression
-                                  (identifier)))))))))))))))
+                                        (identifier)))
+                                    (identifier)))
+                                (identifier))))))))))))))
       (expression
-        (primary_expression
-          (primary_expression
-            (identifier))
+        (call_expression
+          (identifier)
           (arguments
-            (primary_expression
-              (primary_expression
-                (identifier))
+            (call_expression
+              (identifier)
               (type_arguments
                 (type_list
-                  (identifier)))
+                  (type
+                    (identifier))))
               (arguments))
-            (primary_expression
-              (identifier)))))))
+            (identifier))))))
   (function_definition
     (identifier)
     (parameter_list
       (param
         (identifier)
-        (generic_type
-          (identifier)
-          (type_arguments
-            (type_list
+        (type
+          (generic_type
+            (identifier)
+            (type_arguments
+              (type_list
+                (type
+                  (identifier))))))))
+    (type
+      (generic_type
+        (identifier)
+        (type_arguments
+          (type_list
+            (type
               (identifier))))))
-    (generic_type
-      (identifier)
-      (type_arguments
-        (type_list
-          (identifier))))
     (block
       (expression
-        (primary_expression
-          (primary_expression
-            (primary_expression
-              (identifier))
+        (call_expression
+          (proj_expression
+            (identifier)
             (identifier))
           (type_arguments
             (type_list
-              (identifier)
-              (identifier)))
+              (type
+                (identifier))
+              (type
+                (identifier))))
           (arguments
             (lambda_expression
               (identifier)
               (inline_expression
-                (primary_expression
-                  (infix_expression
-                    (primary_expression
-                      (identifier))
-                    (operator_identifier)
-                    (primary_expression
-                      (identifier))))))))))))
+                (infix_expression
+                  (identifier)
+                  (operator_identifier)
+                  (literal
+                    (integer)))))))))))
 
-=======
+================================================================================
 Methods
-=======
+================================================================================
 
 impl List[A]:
     fun map[B](f: A -> B) -> List[B]
@@ -243,7 +266,7 @@ impl List[A]:
         }
         iter(Nil(), this)
 
----
+--------------------------------------------------------------------------------
 
 (source_file
   (type_function_definitions
@@ -259,14 +282,19 @@ impl List[A]:
       (parameter_list
         (param
           (identifier)
-          (function_type
-            (identifier)
-            (identifier))))
-      (generic_type
-        (identifier)
-        (type_arguments
-          (type_list
-            (identifier))))
+          (type
+            (function_type
+              (type
+                (identifier))
+              (type
+                (identifier))))))
+      (type
+        (generic_type
+          (identifier)
+          (type_arguments
+            (type_list
+              (type
+                (identifier))))))
       (block
         (expression
           (let_expression
@@ -283,14 +311,12 @@ impl List[A]:
                     (block
                       (expression
                         (match_expression
-                          (primary_expression
-                            (identifier))
+                          (identifier)
                           (case
                             (pattern
                               (identifier))
                             (inline_expression
-                              (primary_expression
-                                (identifier))))
+                              (identifier)))
                           (case
                             (pattern
                               (identifier)
@@ -300,32 +326,23 @@ impl List[A]:
                                 (pattern
                                   (identifier))))
                             (inline_expression
-                              (primary_expression
-                                (primary_expression
-                                  (identifier))
+                              (call_expression
+                                (identifier)
                                 (arguments
-                                  (primary_expression
-                                    (primary_expression
-                                      (identifier))
+                                  (call_expression
+                                    (identifier)
                                     (arguments
-                                      (primary_expression
-                                        (primary_expression
-                                          (identifier))
+                                      (call_expression
+                                        (identifier)
                                         (arguments
-                                          (primary_expression
-                                            (identifier))))
-                                      (primary_expression
-                                        (identifier))))
-                                  (primary_expression
-                                    (identifier)))))))))))))))
+                                          (identifier)))
+                                      (identifier)))
+                                  (identifier))))))))))))))
         (expression
-          (primary_expression
-            (primary_expression
-              (identifier))
+          (call_expression
+            (identifier)
             (arguments
-              (primary_expression
-                (primary_expression
-                  (identifier))
+              (call_expression
+                (identifier)
                 (arguments))
-              (primary_expression
-                (identifier)))))))))
+              (this))))))))
