@@ -1,0 +1,43 @@
+fun sum(a: i32, b: i32) -> i32
+    a + b
+
+type Option[T]:
+    Some(T)
+    None
+
+fun is_some[A](o: Option[A]) -> bool
+    match o:
+        Some(a) => true
+        None => false
+
+impl Option[A]:
+    fun is_some() -> bool
+        match this:
+            Some(a) => true
+            None => false
+
+fun check_it[T](o: Option[T]) -> bool
+    o.is_some[T]()
+
+type List[A]:
+    Cons(head: A, t: List[A])
+    Nil
+
+impl List[A]:
+    fun map[B](f: A -> B) -> List[B]
+        let iter = (acc: List[B], l: List[A]) -> List[B] => {
+            match l:
+                Nil => acc
+                Cons(h, t) => iter(Cons[B](f(h), acc), t)
+        }
+        iter(Nil[B](), this)
+
+fun all_plus_one(l: List[i32]) -> List[i32]
+    l.map[i32, i32]((a: i32) => a + 1)
+
+type Point:
+    x: f32
+    y: f32
+
+fun zero_point() -> Point
+    Point(0.123, 123.321, 23, 1243)

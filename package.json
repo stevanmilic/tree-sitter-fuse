@@ -9,7 +9,7 @@
     ],
     "scripts": {
         "build": "tree-sitter generate && node-gyp build",
-        "test": "tree-sitter test && script/parse-examples"
+        "test": "tree-sitter test && tree-sitter parse examples/*.fuse --quiet --time"
     },
     "author": "Stevan Milic",
     "license": "ISC",
