@@ -1,8 +1,8 @@
 const PREC = {
-  lambda_binding: 1,
-  infix: 2,
-  call: 3,
-  field: 3,
+    lambda_binding: 1,
+    infix: 2,
+    call: 3,
+    field: 3,
 };
 
 module.exports = grammar({
@@ -255,9 +255,9 @@ module.exports = grammar({
         )),
 
         infix_expression: $ => prec.left(PREC.infix, seq(
-          field('left', $._primary_expression),
-          field('operator', $.operator_identifier),
-          field('right', $._primary_expression)
+            field('left', $._primary_expression),
+            field('operator', $.operator_identifier),
+            field('right', $._primary_expression)
         )),
 
         proj_expression: $ => prec(PREC.field, seq(
@@ -266,9 +266,9 @@ module.exports = grammar({
         )),
 
         _parenthesized_expression: $ => seq(
-          '(',
-          $._primary_expression,
-          ')'
+            '(',
+            $._primary_expression,
+            ')'
         ),
 
         // Lexical tokens
@@ -289,11 +289,12 @@ module.exports = grammar({
             '||',
         ),
 
-        identifier: $ => /[a-zA-Z0-9_]+/,
+        identifier: $ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
         literal: $ => choice(
             $.boolean,
             $.integer,
+            $.float,
             $.string,
         ),
 
@@ -302,7 +303,11 @@ module.exports = grammar({
         boolean: $ => choice($.true, $.false),
         true: $ => 'true',
         false: $ => 'false',
-        integer: $ => /[\d\.]+/,
+        integer: $ => token(repeat1(/[0-9]+/)),
+        float: $ => {
+            const digits = repeat1(/[0-9]+_?/);
+            return token(seq(digits, '.', digits));
+        },
         string: $ => seq(
             '"',
             repeat(choice(

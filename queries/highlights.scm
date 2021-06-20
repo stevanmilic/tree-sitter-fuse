@@ -1,10 +1,34 @@
 ; Identifier naming conventions
 
-((identifier) @constructor
- (#match? @constructor "^[A-Z]"))
-;
+(identifier) @variable
+
 ((identifier) @constant
  (#match? @constant "^[A-Z][A-Z_]*$"))
+
+((identifier) @constant
+ (#match? @constant "^[A-Z]"))
+
+; Types
+
+(variant_definition
+  name: (identifier) @type)
+
+(record_definition
+  name: (identifier) @type)
+
+(tuple_definition
+  name: (identifier) @type)
+
+(type_function_definitions
+  type: (identifier) @type)
+
+(type_param
+  name: (identifier) @type)
+
+(generic_type
+  type: (identifier) @type)
+
+(type (identifier) @type)
 
 ; Function calls
 
@@ -16,7 +40,6 @@
     field: (identifier) @function.method))
 
 ; Function and method definitions
-;--------------------------------
 
 (function_definition
   name: (identifier) @function)
@@ -25,25 +48,20 @@
     (function_definition
       name: (identifier) @function.method))
 
-(identifier) @variable
+(param
+  name: (identifier) @parameter)
+
+(binding
+  name: (identifier) @parameter)
 
 (proj_expression field: (identifier) @property)
-
-(type (identifier) @type)
 
 ; Literals
 (this) @variable.builtin
 
-[
-  (true)
-  (false)
-] @constant.builtin
-
-[
-  (integer)
-  ; (float)
-] @number
-
+(boolean) @boolean
+(integer) @number
+(float) @float
 (string) @string
 (escape_sequence) @escape
 
@@ -61,21 +79,30 @@
  "!="
  "&&"
  "||"
+ "->"
+ "=>"
 ] @operator
 
 [
-  "("
-  ")"
-  "["
-  "]"
-  "{"
-  "}"
+ "("
+ ")"
+ "["
+ "]"
+ "{"
+ "}"
 ]  @punctuation.bracket
 
+
 [
- "fun"
+ "."
+ ","
+] @punctuation.delimiter
+
+[
  "impl"
  "match"
  "let"
  "type"
 ] @keyword
+
+"fun" @keyword.function
