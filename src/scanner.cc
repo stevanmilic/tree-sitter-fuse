@@ -1,3 +1,7 @@
+// Forked from https://github.com/tree-sitter/tree-sitter-python/blob/master/src/scanner.cc
+// Copyright (c) 2016 Max Brunsfeld
+// Licensed under the MIT license.
+
 #include <tree_sitter/parser.h>
 #include <vector>
 #include <cwctype>
