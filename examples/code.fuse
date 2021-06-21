@@ -1,6 +1,9 @@
 fun sum(a: i32, b: i32) -> i32
     a + b
 
+fun one_plus_two() -> i32
+    sum(1, 2)
+
 type Option[T]:
     Some(T)
     None
@@ -15,9 +18,6 @@ impl Option[A]:
         match this:
             Some(a) => true
             None => false
-
-fun check_it[T](o: Option[T]) -> bool
-    o.is_some[T]()
 
 type List[A]:
     Cons(head: A, t: List[A])
@@ -36,8 +36,32 @@ fun all_plus_one(l: List[i32]) -> List[i32]
     l.map[i32, i32]((a: i32) => a + 1)
 
 type Point:
-    x: f32
-    y: f32
+    x: i32
+    y: i32
 
 fun zero_point() -> Point
-    Point(0.123, 123.321, 23, 1243)
+    Point(0, 0)
+
+type TupleInt(i32, i32)
+
+fun same_values_tuple(v: i32) -> TupleInt
+    TupleInt(v, v)
+
+type Tuple[A, B](A, B)
+
+fun gen_same_values_tuple[T](v: T) -> Tuple[T, T]
+    Tuple[T, T](v, v)
+
+fun check_it[T](o: Option[T]) -> bool
+    o.is_some[T]()
+
+fun main() -> bool
+    Some[i32](5).is_some[i32]()
+
+type Context = List[Tuple[str, Point]]
+
+fun empty_context() -> Context
+    Nil()
+
+fun add_name_to_context(c: Context, n: str, p: Point) -> Context
+    Cons[Tuple[str, Point]](Tuple[str, Point](n, p), c)

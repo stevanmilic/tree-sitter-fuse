@@ -25,6 +25,7 @@ module.exports = grammar({
             $.record_definition,
             $.tuple_definition,
             $.type_function_definitions,
+            $.type_alias_definition,
         ),
 
         variant_definition: $ => seq(
@@ -80,6 +81,14 @@ module.exports = grammar({
             $._indent,
             field('methods', repeat1($.function_definition)),
             $._dedent,
+        ),
+
+        type_alias_definition: $ => seq(
+            'type',
+            field('name', $.identifier),
+            field('type_parameters', optional($.type_param_clause)),
+            '=',
+            field('type', $.type),
         ),
 
         function_definition: $ => seq(

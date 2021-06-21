@@ -870,6 +870,10 @@
           "named": true
         },
         {
+          "type": "type_alias_definition",
+          "named": true
+        },
+        {
           "type": "type_function_definitions",
           "named": true
         },
@@ -971,6 +975,42 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "type_alias_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "type": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "type",
+            "named": true
+          }
+        ]
+      },
+      "type_parameters": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "type_param_clause",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {

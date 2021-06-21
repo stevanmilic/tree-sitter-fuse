@@ -127,7 +127,7 @@ type DataPoint[A, B, C]:
           (identifier))))))
 
 ================================================================================
-Tuple types
+Type alias
 ================================================================================
 
 type TupleInt(i32, i32)
@@ -154,3 +154,45 @@ type GenTuple[T](T, T)
         (identifier))
       (type
         (identifier)))))
+
+================================================================================
+Tuple types
+================================================================================
+
+type Context = List[Tuple[String, Binding]]
+
+type MyEither[T] = Either[String, T]
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (type_alias_definition
+    (identifier)
+    (type
+      (generic_type
+        (identifier)
+        (type_arguments
+          (type_list
+            (type
+              (generic_type
+                (identifier)
+                (type_arguments
+                  (type_list
+                    (type
+                      (identifier))
+                    (type
+                      (identifier)))))))))))
+  (type_alias_definition
+    (identifier)
+    (type_param_clause
+      (type_param
+        (identifier)))
+    (type
+      (generic_type
+        (identifier)
+        (type_arguments
+          (type_list
+            (type
+              (identifier))
+            (type
+              (identifier))))))))
