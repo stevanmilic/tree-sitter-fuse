@@ -22,6 +22,9 @@
 (type_function_definitions
   type: (identifier) @type)
 
+(type_alias_definition
+  name: (identifier) @type)
+
 (type_param
   name: (identifier) @type)
 
