@@ -9,6 +9,7 @@ type Option[T]:
     None
 
 fun is_some[A](o: Option[A]) -> bool
+    # Check if an option has a value or not.
     match o:
         Some(a) => true
         None => false

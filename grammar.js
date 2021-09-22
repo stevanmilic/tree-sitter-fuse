@@ -1,357 +1,329 @@
 const PREC = {
-    lambda_binding: 1,
-    infix: 2,
-    call: 3,
-    field: 3,
+  lambda_binding: 1,
+  infix: 2,
+  call: 3,
+  field: 3,
 };
 
 module.exports = grammar({
-    name: 'fuse',
+  name: "fuse",
 
-    externals: $ => [
-        $._newline,
+  externals: ($) => [$._newline, $._indent, $._dedent],
+
+  extras: ($) => [/\s/, $.comment],
+
+  word: ($) => $.identifier,
+
+  rules: {
+    source_file: ($) => repeat($._definition),
+
+    _definition: ($) =>
+      choice(
+        $.function_definition,
+        $.variant_definition,
+        $.record_definition,
+        $.tuple_definition,
+        $.type_function_definitions,
+        $.type_alias_definition
+      ),
+
+    variant_definition: ($) =>
+      seq(
+        "type",
+        field("name", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        ":",
         $._indent,
-        $._dedent,
-    ],
+        field("values", repeat1($.variant_type_value)),
+        $._dedent
+      ),
 
-    word: $ => $.identifier,
+    variant_type_value: ($) =>
+      seq(field("name", $.identifier), optional($.variant_type_value_args)),
 
-    rules: {
-        source_file: $ => repeat($._definition),
+    variant_type_value_args: ($) =>
+      seq("(", choice($.type_list, $.parameter_list), ")"),
 
-        _definition: $ => choice(
-            $.function_definition,
-            $.variant_definition,
-            $.record_definition,
-            $.tuple_definition,
-            $.type_function_definitions,
-            $.type_alias_definition,
-        ),
+    record_definition: ($) =>
+      seq(
+        "type",
+        field("name", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        ":",
+        $._indent,
+        field("fields", repeat1($.record_type_field)),
+        $._dedent
+      ),
 
-        variant_definition: $ => seq(
-            'type',
-            field('name', $.identifier),
-            field('type_parameters', optional($.type_param_clause)),
-            ':',
-            $._indent,
-            field('values', repeat1($.variant_type_value)),
-            $._dedent,
-        ),
+    record_type_field: ($) => $.param,
 
-        variant_type_value: $ => seq(
-            field('name', $.identifier),
-            optional($.variant_type_value_args)
-        ),
+    tuple_definition: ($) =>
+      seq(
+        "type",
+        field("name", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        "(",
+        field("fields", $.type_list),
+        ")"
+      ),
 
-        variant_type_value_args: $ => seq(
-            '(',
-            choice(
-                $.type_list,
-                $.parameter_list,
-            ),
-            ')',
-        ),
+    type_function_definitions: ($) =>
+      seq(
+        "impl",
+        field("type", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        ":",
+        $._indent,
+        field("methods", repeat1($.function_definition)),
+        $._dedent
+      ),
 
-        record_definition: $ => seq(
-            'type',
-            field('name', $.identifier),
-            field('type_parameters', optional($.type_param_clause)),
-            ':',
-            $._indent,
-            field('fields', repeat1($.record_type_field)),
-            $._dedent,
-        ),
+    type_alias_definition: ($) =>
+      seq(
+        "type",
+        field("name", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        "=",
+        field("type", $.type)
+      ),
 
-        record_type_field: $ => $.param,
+    function_definition: ($) =>
+      seq(
+        "fun",
+        field("name", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        "(",
+        field("parameters", optional($.parameter_list)),
+        ")",
+        "->",
+        field("type", $.type),
+        $.block
+      ),
 
-        tuple_definition: $ => seq(
-            'type',
-            field('name', $.identifier),
-            field('type_parameters', optional($.type_param_clause)),
-            '(',
-            field('fields', $.type_list),
-            ')',
-        ),
+    // Types
 
-        type_function_definitions: $ => seq(
-            'impl',
-            field('type', $.identifier),
-            field('type_parameters', optional($.type_param_clause)),
-            ':',
-            $._indent,
-            field('methods', repeat1($.function_definition)),
-            $._dedent,
-        ),
+    type_param: ($) => field("name", $.identifier),
+    type_param_clause: ($) => seq("[", commaSep1($.type_param), "]"),
 
-        type_alias_definition: $ => seq(
-            'type',
-            field('name', $.identifier),
-            field('type_parameters', optional($.type_param_clause)),
-            '=',
-            field('type', $.type),
-        ),
+    type_list: ($) => commaSep1(field("type", $.type)),
+    type_arguments: ($) => seq("[", $.type_list, "]"),
 
-        function_definition: $ => seq(
-            'fun',
-            field('name', $.identifier),
-            field('type_parameters', optional($.type_param_clause)),
-            '(',
-            field('parameters', optional($.parameter_list)),
-            ')',
-            '->',
-            field('type', $.type),
-            $.block,
-        ),
+    type: ($) => choice($.function_type, $.tuple_type, $._simple_type),
 
-        // Types 
+    function_type: ($) =>
+      prec.right(
+        seq(
+          field("parameter_types", $.type),
+          "->",
+          field("return_type", $.type)
+        )
+      ),
 
-        type_param: $ => field('name', $.identifier),
-        type_param_clause: $ => seq(
-            '[',
-            commaSep1($.type_param),
-            ']',
-        ),
+    tuple_type: ($) => seq("(", $.type_list, ")"),
 
+    _simple_type: ($) => choice($.generic_type, $.identifier),
 
-        type_list: $ => commaSep1(field('type', $.type)),
-        type_arguments: $ => seq(
-            '[',
-            $.type_list,
-            ']'
-        ),
+    generic_type: ($) =>
+      seq(
+        field("type", $._simple_type),
+        field("type_arguments", $.type_arguments)
+      ),
 
-        type: $ => choice(
-            $.function_type,
-            $.tuple_type,
-            $._simple_type,
-        ),
+    param: ($) => seq(field("name", $.identifier), ":", field("type", $.type)),
 
-        function_type: $ => prec.right(seq(
-            field('parameter_types', $.type),
-            '->',
-            field('return_type', $.type)
-        )),
+    parameter_list: ($) => commaSep1($.param),
 
-        tuple_type: $ => seq(
-            '(',
-            $.type_list,
-            ')',
-        ),
+    // Expressions
+    block: ($) =>
+      seq($._indent, field("expressions", repeat1($.expression)), $._dedent),
 
-        _simple_type: $ => choice(
-            $.generic_type,
-            $.identifier,
-        ),
+    expression: ($) =>
+      choice(
+        $.let_expression,
+        $.match_expression,
+        $.lambda_expression,
+        $._primary_expression
+      ),
 
-        generic_type: $ => seq(
-            field('type', $._simple_type),
-            field('type_arguments', $.type_arguments)
-        ),
+    inline_block_expression: ($) => seq("{", $.block, "}"),
 
-        param: $ => seq(
-            field('name', $.identifier),
-            ':',
-            field('type', $.type),
-        ),
+    inline_expression: ($) =>
+      choice(
+        $.lambda_expression,
+        $._primary_expression,
+        $.inline_block_expression
+      ),
 
-        parameter_list: $ => commaSep1($.param),
+    let_expression: ($) =>
+      seq(
+        "let",
+        field("name", $.identifier),
+        optional(seq(":", field("type", $.type))),
+        "=",
+        $.inline_expression
+      ),
 
-        // Expressions
-        block: $ => seq(
-            $._indent,
-            field('expressions', repeat1($.expression)),
-            $._dedent,
-        ),
+    binding: ($) =>
+      prec(
+        PREC.lambda_binding,
+        seq(
+          field("name", $.identifier),
+          optional(seq(":", field("type", $.type)))
+        )
+      ),
 
-        expression: $ => choice(
-            $.let_expression,
-            $.match_expression,
-            $.lambda_expression,
-            $._primary_expression,
-        ),
+    bindings: ($) => seq("(", commaSep($.binding), ")"),
 
-        inline_block_expression: $ => seq(
-            '{',
-            $.block,
-            '}',
-        ),
+    lambda_expression: ($) =>
+      seq(
+        choice($.bindings, field("name", $.identifier)),
+        optional(seq("->", field("type", $.type))),
+        "=>",
+        $.inline_expression
+      ),
 
-        inline_expression: $ => choice(
-            $.lambda_expression,
-            $._primary_expression,
-            $.inline_block_expression,
-        ),
+    pattern: ($) =>
+      choice(
+        seq(field("type", $.identifier), $.patterns),
+        $.patterns,
+        $.literal,
+        $.identifier,
+        "_"
+      ),
 
-        let_expression: $ => seq(
-            'let',
-            field('name', $.identifier),
-            optional(seq(':', field('type', $.type))),
-            '=',
-            $.inline_expression,
-        ),
+    patterns: ($) => seq("(", commaSep(field("pattern", $.pattern)), ")"),
 
-        binding: $ => prec(PREC.lambda_binding, seq(
-            field('name', $.identifier),
-            optional(seq(':', field('type', $.type))),
-        )),
+    case: ($) => seq(sep1("|", $.pattern), "=>", $.inline_expression),
 
-        bindings: $ => seq(
-            '(',
-            commaSep($.binding),
-            ')',
-        ),
+    match_expression: ($) =>
+      seq(
+        "match",
+        $._primary_expression,
+        ":",
+        $._indent,
+        repeat1($.case),
+        $._dedent
+      ),
 
-        lambda_expression: $ => seq(
-            choice(
-                $.bindings,
-                field('name', $.identifier),
-            ),
-            optional(
-                seq(
-                    '->',
-                    field('type', $.type),
-                )
-            ),
-            '=>',
-            $.inline_expression,
-        ),
+    _primary_expression: ($) =>
+      choice(
+        $.literal,
+        $.identifier,
+        $.this,
+        $.call_expression,
+        $.proj_expression,
+        $._parenthesized_expression,
+        $.infix_expression
+      ),
 
-        pattern: $ => choice(
-            seq(field('type', $.identifier), $.patterns),
-            $.patterns,
-            $.literal,
-            $.identifier,
-            '_',
-        ),
+    arguments: ($) =>
+      seq(
+        "(",
+        commaSep(choice($._primary_expression, $.lambda_expression)),
+        ")"
+      ),
 
-        patterns: $ => seq('(', commaSep(field('pattern', $.pattern)), ')'),
+    call_expression: ($) =>
+      prec(
+        PREC.call,
+        seq(
+          field("function", $._primary_expression),
+          field("type_arguments", optional($.type_arguments)),
+          field("arguments", $.arguments)
+        )
+      ),
 
-        case: $ => seq(
-            sep1('|', $.pattern),
-            '=>',
-            $.inline_expression,
-        ),
+    infix_expression: ($) =>
+      prec.left(
+        PREC.infix,
+        seq(
+          field("left", $._primary_expression),
+          field("operator", $.operator_identifier),
+          field("right", $._primary_expression)
+        )
+      ),
 
-        match_expression: $ => seq(
-            'match',
-            $._primary_expression,
-            ':',
-            $._indent,
-            repeat1($.case),
-            $._dedent,
-        ),
+    proj_expression: ($) =>
+      prec(
+        PREC.field,
+        seq(
+          field("value", $._primary_expression),
+          repeat1(seq(".", field("field", $.identifier)))
+        )
+      ),
 
-        _primary_expression: $ => choice(
-            $.literal,
-            $.identifier,
-            $.this,
-            $.call_expression,
-            $.proj_expression,
-            $._parenthesized_expression,
-            $.infix_expression,
-        ),
+    _parenthesized_expression: ($) => seq("(", $._primary_expression, ")"),
 
-        arguments: $ => seq(
-            '(',
-            commaSep(choice($._primary_expression, $.lambda_expression)),
-            ')'
-        ),
+    // Lexical tokens
 
-        call_expression: $ => prec(PREC.call, seq(
-            field('function', $._primary_expression),
-            field('type_arguments', optional($.type_arguments)),
-            field('arguments', $.arguments),
-        )),
+    operator_identifier: ($) =>
+      choice(
+        "+",
+        "-",
+        "*",
+        "/",
+        "%",
+        "<=",
+        "<",
+        ">",
+        ">=",
+        "==",
+        "!=",
+        "&&",
+        "||"
+      ),
 
-        infix_expression: $ => prec.left(PREC.infix, seq(
-            field('left', $._primary_expression),
-            field('operator', $.operator_identifier),
-            field('right', $._primary_expression)
-        )),
+    identifier: ($) => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
 
-        proj_expression: $ => prec(PREC.field, seq(
-            field('value', $._primary_expression),
-            repeat1(seq('.', field('field', $.identifier)))
-        )),
+    literal: ($) => choice($.boolean, $.integer, $.float, $.string),
 
-        _parenthesized_expression: $ => seq(
-            '(',
-            $._primary_expression,
-            ')'
-        ),
+    this: ($) => "this",
 
-        // Lexical tokens
+    boolean: ($) => choice($.true, $.false),
+    true: ($) => "true",
+    false: ($) => "false",
+    integer: ($) => token(repeat1(/[0-9]+/)),
+    float: ($) => {
+      const digits = repeat1(/[0-9]+_?/);
+      return token(seq(digits, ".", digits));
+    },
+    string: ($) =>
+      seq(
+        '"',
+        repeat(choice(token.immediate(prec(1, /[^"\\]+/)), $.escape_sequence)),
+        '"'
+      ),
 
-        operator_identifier: $ => choice(
-            '+',
-            '-',
-            '*',
-            '/',
-            '%',
-            '<=',
-            '<',
-            '>',
-            '>=',
-            '==',
-            '!=',
-            '&&',
-            '||',
-        ),
+    escape_sequence: ($) =>
+      token.immediate(
+        seq(
+          "\\",
+          choice(
+            /[^xu0-7]/,
+            /[0-7]{1,3}/,
+            /x[0-9a-fA-F]{2}/,
+            /u[0-9a-fA-F]{4}/,
+            /u{[0-9a-fA-F]+}/
+          )
+        )
+      ),
 
-        identifier: $ => /[_\p{XID_Start}][_\p{XID_Continue}]*/,
-
-        literal: $ => choice(
-            $.boolean,
-            $.integer,
-            $.float,
-            $.string,
-        ),
-
-        this: $ => 'this',
-
-        boolean: $ => choice($.true, $.false),
-        true: $ => 'true',
-        false: $ => 'false',
-        integer: $ => token(repeat1(/[0-9]+/)),
-        float: $ => {
-            const digits = repeat1(/[0-9]+_?/);
-            return token(seq(digits, '.', digits));
-        },
-        string: $ => seq(
-            '"',
-            repeat(choice(
-                token.immediate(prec(1, /[^"\\]+/)),
-                $.escape_sequence
-            )),
-            '"'
-        ),
-
-        escape_sequence: $ => token.immediate(seq(
-            '\\',
-            choice(
-                /[^xu0-7]/,
-                /[0-7]{1,3}/,
-                /x[0-9a-fA-F]{2}/,
-                /u[0-9a-fA-F]{4}/,
-                /u{[0-9a-fA-F]+}/
-            )
-        )),
-    }
-
+    comment: ($) => token(seq("#", /.*/)),
+  },
 });
 
 function commaSep(rule) {
-    return optional(commaSep1(rule))
+  return optional(commaSep1(rule));
 }
 
 function commaSep1(rule) {
-    return seq(rule, repeat(seq(',', rule)))
+  return seq(rule, repeat(seq(",", rule)));
 }
 
 function sep(delimiter, rule) {
-    return optional(sep1(delimiter, rule))
+  return optional(sep1(delimiter, rule));
 }
 
 function sep1(delimiter, rule) {
-    return seq(rule, repeat(seq(delimiter, rule)))
+  return seq(rule, repeat(seq(delimiter, rule)));
 }
