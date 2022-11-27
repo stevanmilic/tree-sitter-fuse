@@ -35,6 +35,14 @@
         {
           "type": "SYMBOL",
           "name": "type_alias_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "trait_definition"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "trait_function_definitions"
         }
       ]
     },
@@ -310,6 +318,168 @@
         }
       ]
     },
+    "trait_function_definitions": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "impl"
+        },
+        {
+          "type": "FIELD",
+          "name": "trait",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "type_parameters",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_param_clause"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": "for"
+        },
+        {
+          "type": "FIELD",
+          "name": "type",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "type_parameters",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_param_clause"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_indent"
+        },
+        {
+          "type": "FIELD",
+          "name": "methods",
+          "content": {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "function_definition"
+            }
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_dedent"
+        }
+      ]
+    },
+    "trait_definition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "trait"
+        },
+        {
+          "type": "FIELD",
+          "name": "name",
+          "content": {
+            "type": "SYMBOL",
+            "name": "identifier"
+          }
+        },
+        {
+          "type": "FIELD",
+          "name": "type_parameters",
+          "content": {
+            "type": "CHOICE",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "type_param_clause"
+              },
+              {
+                "type": "BLANK"
+              }
+            ]
+          }
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_indent"
+        },
+        {
+          "type": "FIELD",
+          "name": "methods",
+          "content": {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "trait_function"
+            }
+          }
+        },
+        {
+          "type": "SYMBOL",
+          "name": "_dedent"
+        }
+      ]
+    },
+    "trait_function": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "function_signature"
+            },
+            {
+              "type": "STRING",
+              "value": ";"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "function_definition"
+        }
+      ]
+    },
     "type_alias_definition": {
       "type": "SEQ",
       "members": [
@@ -356,6 +526,19 @@
       ]
     },
     "function_definition": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "function_signature"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block"
+        }
+      ]
+    },
+    "function_signature": {
       "type": "SEQ",
       "members": [
         {
@@ -421,10 +604,6 @@
             "type": "SYMBOL",
             "name": "type"
           }
-        },
-        {
-          "type": "SYMBOL",
-          "name": "block"
         }
       ]
     },

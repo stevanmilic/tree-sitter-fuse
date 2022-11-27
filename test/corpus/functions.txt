@@ -12,26 +12,28 @@ fun sum(a: i32, b: i32) -> i32
 
 (source_file
   (function_definition
-    (identifier)
-    (type
-      (identifier))
+    (function_signature
+      (identifier)
+      (type
+        (identifier)))
     (block
       (expression
         (literal
           (string)))))
   (function_definition
-    (identifier)
-    (parameter_list
-      (param
-        (identifier)
-        (type
-          (identifier)))
-      (param
-        (identifier)
-        (type
-          (identifier))))
-    (type
-      (identifier))
+    (function_signature
+      (identifier)
+      (parameter_list
+        (param
+          (identifier)
+          (type
+            (identifier)))
+        (param
+          (identifier)
+          (type
+            (identifier))))
+      (type
+        (identifier)))
     (block
       (expression
         (infix_expression
@@ -63,22 +65,23 @@ fun all_plus_one(l: List[i32]) -> List[i32]
 
 (source_file
   (function_definition
-    (identifier)
-    (type_param_clause
-      (type_param
+    (function_signature
+      (identifier)
+      (type_param_clause
+        (type_param
+          (identifier)))
+      (parameter_list
+        (param
+          (identifier)
+          (type
+            (generic_type
+              (identifier)
+              (type_arguments
+                (type_list
+                  (type
+                    (identifier))))))))
+      (type
         (identifier)))
-    (parameter_list
-      (param
-        (identifier)
-        (type
-          (generic_type
-            (identifier)
-            (type_arguments
-              (type_list
-                (type
-                  (identifier))))))))
-    (type
-      (identifier))
     (block
       (expression
         (match_expression
@@ -101,37 +104,38 @@ fun all_plus_one(l: List[i32]) -> List[i32]
                 (boolean
                   (false)))))))))
   (function_definition
-    (identifier)
-    (type_param_clause
-      (type_param
-        (identifier))
-      (type_param
-        (identifier)))
-    (parameter_list
-      (param
-        (identifier)
-        (type
-          (generic_type
-            (identifier)
-            (type_arguments
-              (type_list
-                (type
-                  (identifier)))))))
-      (param
-        (identifier)
-        (type
-          (function_type
-            (type
-              (identifier))
-            (type
-              (identifier))))))
-    (type
-      (generic_type
-        (identifier)
-        (type_arguments
-          (type_list
-            (type
-              (identifier))))))
+    (function_signature
+      (identifier)
+      (type_param_clause
+        (type_param
+          (identifier))
+        (type_param
+          (identifier)))
+      (parameter_list
+        (param
+          (identifier)
+          (type
+            (generic_type
+              (identifier)
+              (type_arguments
+                (type_list
+                  (type
+                    (identifier)))))))
+        (param
+          (identifier)
+          (type
+            (function_type
+              (type
+                (identifier))
+              (type
+                (identifier))))))
+      (type
+        (generic_type
+          (identifier)
+          (type_arguments
+            (type_list
+              (type
+                (identifier)))))))
     (block
       (expression
         (let_expression
@@ -213,24 +217,25 @@ fun all_plus_one(l: List[i32]) -> List[i32]
               (arguments))
             (identifier))))))
   (function_definition
-    (identifier)
-    (parameter_list
-      (param
-        (identifier)
-        (type
-          (generic_type
-            (identifier)
-            (type_arguments
-              (type_list
-                (type
-                  (identifier))))))))
-    (type
-      (generic_type
-        (identifier)
-        (type_arguments
-          (type_list
-            (type
-              (identifier))))))
+    (function_signature
+      (identifier)
+      (parameter_list
+        (param
+          (identifier)
+          (type
+            (generic_type
+              (identifier)
+              (type_arguments
+                (type_list
+                  (type
+                    (identifier))))))))
+      (type
+        (generic_type
+          (identifier)
+          (type_arguments
+            (type_list
+              (type
+                (identifier)))))))
     (block
       (expression
         (call_expression
@@ -275,26 +280,27 @@ impl List[A]:
       (type_param
         (identifier)))
     (function_definition
-      (identifier)
-      (type_param_clause
-        (type_param
-          (identifier)))
-      (parameter_list
-        (param
-          (identifier)
-          (type
-            (function_type
-              (type
-                (identifier))
-              (type
-                (identifier))))))
-      (type
-        (generic_type
-          (identifier)
-          (type_arguments
-            (type_list
-              (type
-                (identifier))))))
+      (function_signature
+        (identifier)
+        (type_param_clause
+          (type_param
+            (identifier)))
+        (parameter_list
+          (param
+            (identifier)
+            (type
+              (function_type
+                (type
+                  (identifier))
+                (type
+                  (identifier))))))
+        (type
+          (generic_type
+            (identifier)
+            (type_arguments
+              (type_list
+                (type
+                  (identifier)))))))
       (block
         (expression
           (let_expression
@@ -346,3 +352,58 @@ impl List[A]:
                 (identifier)
                 (arguments))
               (this))))))))
+
+================================================================================
+Traits
+================================================================================
+
+trait Summary:
+    fun summarize_author() -> str;
+
+    fun summarize() -> str
+        "author: " + this.summarize_author()
+
+impl Summary for Tweet:
+    fun summarize_author() -> str
+        this.username
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (trait_definition
+    (identifier)
+    (trait_function
+      (function_signature
+        (identifier)
+        (type
+          (identifier))))
+    (trait_function
+      (function_definition
+        (function_signature
+          (identifier)
+          (type
+            (identifier)))
+        (block
+          (expression
+            (infix_expression
+              (literal
+                (string))
+              (operator_identifier)
+              (call_expression
+                (proj_expression
+                  (this)
+                  (identifier))
+                (arguments))))))))
+  (trait_function_definitions
+    (identifier)
+    (identifier)
+    (function_definition
+      (function_signature
+        (identifier)
+        (type
+          (identifier)))
+      (block
+        (expression
+          (proj_expression
+            (this)
+            (identifier)))))))

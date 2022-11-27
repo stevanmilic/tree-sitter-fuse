@@ -24,7 +24,9 @@ module.exports = grammar({
         $.record_definition,
         $.tuple_definition,
         $.type_function_definitions,
-        $.type_alias_definition
+        $.type_alias_definition,
+        $.trait_definition,
+        $.trait_function_definitions
       ),
 
     variant_definition: ($) =>
@@ -78,6 +80,34 @@ module.exports = grammar({
         $._dedent
       ),
 
+    trait_function_definitions: ($) =>
+      seq(
+        "impl",
+        field("trait", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        "for",
+        field("type", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        ":",
+        $._indent,
+        field("methods", repeat1($.function_definition)),
+        $._dedent
+      ),
+
+    trait_definition: ($) =>
+      seq(
+        "trait",
+        field("name", $.identifier),
+        field("type_parameters", optional($.type_param_clause)),
+        ":",
+        $._indent,
+        field("methods", repeat1($.trait_function)),
+        $._dedent
+      ),
+
+    trait_function: ($) =>
+      choice(seq($.function_signature, ";"), $.function_definition),
+
     type_alias_definition: ($) =>
       seq(
         "type",
@@ -87,7 +117,9 @@ module.exports = grammar({
         field("type", $.type)
       ),
 
-    function_definition: ($) =>
+    function_definition: ($) => seq($.function_signature, $.block),
+
+    function_signature: ($) =>
       seq(
         "fun",
         field("name", $.identifier),
@@ -96,8 +128,7 @@ module.exports = grammar({
         field("parameters", optional($.parameter_list)),
         ")",
         "->",
-        field("type", $.type),
-        $.block
+        field("type", $.type)
       ),
 
     // Types

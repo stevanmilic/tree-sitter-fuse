@@ -19,11 +19,17 @@
 (tuple_definition
   name: (identifier) @type)
 
+(trait_definition
+  name: (identifier) @type)
+
 (type_function_definitions
   type: (identifier) @type)
 
-(type_alias_definition
-  name: (identifier) @type)
+(trait_function_definitions
+  trait: (identifier) @type)
+
+(trait_function_definitions
+  type: (identifier) @type)
 
 (type_param
   name: (identifier) @type)
@@ -44,12 +50,13 @@
 
 ; Function and method definitions
 
-(function_definition
+(function_signature
   name: (identifier) @function)
 
 (type_function_definitions
-    (function_definition
-      name: (identifier) @function.method))
+  (function_definition
+    (function_signature
+      name: (identifier) @function.method)))
 
 (param
   name: (identifier) @parameter)
@@ -67,6 +74,8 @@
 (float) @float
 (string) @string
 (escape_sequence) @escape
+(comment) @comment
+(comment) @spell
 
 [
  "+"
@@ -99,6 +108,7 @@
 [
  "."
  ","
+ ";"
 ] @punctuation.delimiter
 
 [
@@ -106,6 +116,8 @@
  "match"
  "let"
  "type"
+ "for"
+ "trait"
 ] @keyword
 
 "fun" @keyword.function
