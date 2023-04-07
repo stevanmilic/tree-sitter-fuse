@@ -32,7 +32,7 @@
           "named": true
         },
         {
-          "type": "this",
+          "type": "self",
           "named": true
         }
       ]
@@ -161,7 +161,7 @@
             "named": true
           },
           {
-            "type": "this",
+            "type": "self",
             "named": true
           }
         ]
@@ -238,7 +238,7 @@
           "named": true
         },
         {
-          "type": "this",
+          "type": "self",
           "named": true
         }
       ]
@@ -402,7 +402,7 @@
             "named": true
           },
           {
-            "type": "this",
+            "type": "self",
             "named": true
           }
         ]
@@ -450,7 +450,7 @@
             "named": true
           },
           {
-            "type": "this",
+            "type": "self",
             "named": true
           }
         ]
@@ -509,7 +509,7 @@
           "named": true
         },
         {
-          "type": "this",
+          "type": "self",
           "named": true
         }
       ]
@@ -651,7 +651,7 @@
           "named": true
         },
         {
-          "type": "this",
+          "type": "self",
           "named": true
         }
       ]
@@ -800,7 +800,7 @@
             "named": true
           },
           {
-            "type": "this",
+            "type": "self",
             "named": true
           }
         ]
@@ -1455,7 +1455,7 @@
     "named": false
   },
   {
-    "type": "this",
+    "type": "self",
     "named": true
   },
   {

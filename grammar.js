@@ -240,7 +240,7 @@ module.exports = grammar({
       choice(
         $.literal,
         $.identifier,
-        $.this,
+        $.self,
         $.call_expression,
         $.proj_expression,
         $._parenthesized_expression,
@@ -308,7 +308,7 @@ module.exports = grammar({
 
     literal: ($) => choice($.boolean, $.integer, $.float, $.string),
 
-    this: ($) => "this",
+    self: ($) => "self",
 
     boolean: ($) => choice($.true, $.false),
     true: ($) => "true",

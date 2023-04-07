@@ -68,7 +68,7 @@ fun add_name_to_context(c: Context, n: str, p: Point) -> Context
     Cons[Tuple[str, Point]](Tuple[str, Point](n, p), c)
 
 trait Summay:
-    fun summarize() -> str;
+  fun summarize() -> str;
 
 impl Summary for Tweet:
   fun summarize() -> str

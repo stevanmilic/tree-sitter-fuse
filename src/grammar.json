@@ -1297,7 +1297,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "this"
+          "name": "self"
         },
         {
           "type": "SYMBOL",
@@ -1591,9 +1591,9 @@
         }
       ]
     },
-    "this": {
+    "self": {
       "type": "STRING",
-      "value": "this"
+      "value": "self"
     },
     "boolean": {
       "type": "CHOICE",

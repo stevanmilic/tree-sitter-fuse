@@ -67,7 +67,7 @@
 (proj_expression field: (identifier) @property)
 
 ; Literals
-(this) @variable.builtin
+(self) @variable.builtin
 
 (boolean) @boolean
 (integer) @number
