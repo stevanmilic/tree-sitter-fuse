@@ -829,8 +829,17 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "param"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "self"
+            },
+            {
+              "type": "SYMBOL",
+              "name": "param"
+            }
+          ]
         },
         {
           "type": "REPEAT",
@@ -842,8 +851,17 @@
                 "value": ","
               },
               {
-                "type": "SYMBOL",
-                "name": "param"
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "SYMBOL",
+                    "name": "self"
+                  },
+                  {
+                    "type": "SYMBOL",
+                    "name": "param"
+                  }
+                ]
               }
             ]
           }

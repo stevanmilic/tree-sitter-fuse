@@ -699,6 +699,10 @@
         {
           "type": "param",
           "named": true
+        },
+        {
+          "type": "self",
+          "named": true
         }
       ]
     }

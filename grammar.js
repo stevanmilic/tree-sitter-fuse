@@ -162,7 +162,7 @@ module.exports = grammar({
 
     param: ($) => seq(field("name", $.identifier), ":", field("type", $.type)),
 
-    parameter_list: ($) => commaSep1($.param),
+    parameter_list: ($) => commaSep1(choice($.self, $.param)),
 
     // Expressions
     block: ($) =>
