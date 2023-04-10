@@ -279,7 +279,7 @@ module.exports = grammar({
         PREC.field,
         seq(
           field("value", $._primary_expression),
-          repeat1(seq(".", field("field", $.identifier)))
+          repeat1(seq(choice(".", "::"), field("field", $.identifier)))
         )
       ),
 

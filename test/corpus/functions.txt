@@ -271,6 +271,13 @@ impl List[A]:
         }
         iter(Nil(), self)
 
+    fun unit[A](a: A) -> List[A]
+        Cons(a, Nil)
+
+fun main() -> Unit
+    List::unit(5)
+    ()
+
 --------------------------------------------------------------------------------
 
 (source_file
@@ -359,7 +366,7 @@ Traits
 ================================================================================
 
 trait Summary:
-    fun summarize_author() -> str;
+    fun summarize_author(self) -> str;
 
     fun summarize(self) -> str
         "author: " + self.summarize_author()
