@@ -359,7 +359,48 @@ fun main() -> Unit
               (call_expression
                 (identifier)
                 (arguments))
-              (self))))))))
+              (self))))))
+    (function_definition
+      (function_signature
+        (identifier)
+        (type_param_clause
+          (type_param
+            (identifier)))
+        (parameter_list
+          (param
+            (identifier)
+            (type
+              (identifier))))
+        (type
+          (generic_type
+            (identifier)
+            (type_arguments
+              (type_list
+                (type
+                  (identifier)))))))
+      (block
+        (expression
+          (call_expression
+            (identifier)
+            (arguments
+              (identifier)
+              (identifier)))))))
+  (function_definition
+    (function_signature
+      (identifier)
+      (type
+        (identifier)))
+    (block
+      (expression
+        (call_expression
+          (call_expression
+            (proj_expression
+              (identifier)
+              (identifier))
+            (arguments
+              (literal
+                (integer))))
+          (arguments))))))
 
 ================================================================================
 Traits
@@ -383,6 +424,8 @@ impl Summary for Tweet:
     (trait_function
       (function_signature
         (identifier)
+        (parameter_list
+          (self))
         (type
           (identifier))))
     (trait_function
