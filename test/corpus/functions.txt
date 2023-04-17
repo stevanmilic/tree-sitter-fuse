@@ -462,3 +462,79 @@ impl Summary for Tweet:
           (proj_expression
             (self)
             (identifier)))))))
+
+================================================================================
+Function with Do expr
+================================================================================
+
+fun test() -> i32
+  let x = Some(1)
+  let y = Some(2)
+  let z = Some(3)
+  do:
+    i <- x
+    j <- y
+    k <- z
+    i + j + k
+
+--------------------------------------------------------------------------------
+
+(source_file
+  (function_definition
+    (function_signature
+      (identifier)
+      (type
+        (identifier)))
+    (block
+      (expression
+        (let_expression
+          (identifier)
+          (inline_expression
+            (call_expression
+              (identifier)
+              (arguments
+                (literal
+                  (integer)))))))
+      (expression
+        (let_expression
+          (identifier)
+          (inline_expression
+            (call_expression
+              (identifier)
+              (arguments
+                (literal
+                  (integer)))))))
+      (expression
+        (let_expression
+          (identifier)
+          (inline_expression
+            (call_expression
+              (identifier)
+              (arguments
+                (literal
+                  (integer)))))))
+      (expression
+        (do_expression
+          (do_action
+            (do_assign
+              (identifier)
+              (inline_expression
+                (identifier))))
+          (do_action
+            (do_assign
+              (identifier)
+              (inline_expression
+                (identifier))))
+          (do_action
+            (do_assign
+              (identifier)
+              (inline_expression
+                (identifier))))
+          (do_action
+            (infix_expression
+              (infix_expression
+                (identifier)
+                (operator_identifier)
+                (identifier))
+              (operator_identifier)
+              (identifier))))))))

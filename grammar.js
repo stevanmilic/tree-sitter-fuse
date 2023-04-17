@@ -172,6 +172,7 @@ module.exports = grammar({
       choice(
         $.let_expression,
         $.match_expression,
+        $.do_expression,
         $.lambda_expression,
         $._primary_expression
       ),
@@ -233,6 +234,19 @@ module.exports = grammar({
         ":",
         $._indent,
         repeat1($.case),
+        $._dedent
+      ),
+
+    do_assign: ($) => seq($.identifier, "<-", $.inline_expression),
+
+    do_action: ($) => choice($._primary_expression, $.do_assign),
+
+    do_expression: ($) =>
+      seq(
+        "do",
+        ":",
+        $._indent,
+        repeat1($.do_action),
         $._dedent
       ),
 
